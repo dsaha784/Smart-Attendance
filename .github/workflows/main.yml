@@ -1,0 +1,32 @@
+name: Android APK Builder Engine
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone Repository Source
+      uses: actions/checkout@v3
+
+    - name: Setup Java Environment
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Setup Gradle Build Tool
+      uses: gradle/gradle-build-action@v2
+
+    - name: Execute Android Studio Compiling
+      run: gradle assembleDebug
+
+    - name: Upload Finished Mobile APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: Attendance-Portal-App
+        path: app/build/outputs/apk/debug/app-debug.apk
